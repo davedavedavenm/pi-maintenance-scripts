@@ -5,10 +5,10 @@ if [ -f "$(dirname "$0")/pi_config.sh" ]; then
 else
     # Fallback configuration if config file is missing
     PI_EMAIL="your-email@example.com"
-    PI_USER="$(whoami)"
-    PI_HOME="/home/${PI_USER}"
+    PI_USER="dave"  # Hardcoded default user
+    PI_HOME="/home/dave"  # Hardcoded default home
     PI_HOSTNAME="$(hostname)"
-    PI_MSMTP_CONFIG="${PI_HOME}/.msmtprc"
+    PI_MSMTP_CONFIG="/home/dave/.msmtprc"  # Hardcoded path to msmtp config
 fi
 
 # Script configuration
@@ -61,6 +61,10 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
+# Debug output to help troubleshoot
+echo "Using msmtp config: ${PI_MSMTP_CONFIG}"
+echo "Home directory: ${PI_HOME}"
+
 # Ensure log directory exists
 mkdir -p "$(dirname "$LOGFILE")"
 
@@ -78,6 +82,17 @@ fi
 if ! command -v msmtp &> /dev/null; then
     echo "msmtp is not installed. Installing..."
     apt-get install -y msmtp
+fi
+
+# Verify msmtp config exists
+if [ ! -f "${PI_MSMTP_CONFIG}" ]; then
+    echo "Warning: msmtp config file ${PI_MSMTP_CONFIG} not found!"
+    # Try to find it
+    FOUND_CONFIG=$(find /home -name ".msmtprc" 2>/dev/null | head -n 1)
+    if [ -n "$FOUND_CONFIG" ]; then
+        echo "Found msmtp config at: $FOUND_CONFIG"
+        PI_MSMTP_CONFIG="$FOUND_CONFIG"
+    fi
 fi
 
 # Check disk space before starting
