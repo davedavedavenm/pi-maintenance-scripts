@@ -3,7 +3,7 @@
 # Edit these values to match your setup
 
 # Basic info
-PI_EMAIL="your-email@example.com"  # Your email address
+PI_EMAIL="david@davidmagnus.co.uk"  # Your email address
 PI_USER="$(whoami)"                 # Current username
 PI_HOSTNAME="$(hostname)"           # System hostname
 
@@ -14,10 +14,10 @@ PI_MSMTP_CONFIG="${PI_HOME}/.msmtprc"  # Path to msmtp config
 PI_RCLONE_CONFIG="${PI_HOME}/.config/rclone/rclone.conf"  # Path to rclone config
 
 # Backup configuration (keeps existing values if script is run on your-pi-hostname)
-if [[ "${PI_HOSTNAME}" == "your-pi-hostname" ]]; then
+if [[ "${PI_HOSTNAME}" == "gdrive" ]]; then
     # Use existing values for this Pi
     PI_BACKUP_REMOTE="gdrive"           # Existing rclone remote name
-    PI_CLOUD_FOLDER="pi_backups_khpihole"  # Existing cloud folder
+    PI_CLOUD_FOLDER="pi_backups_khpi3"  # Existing cloud folder
 else
     # Default values for other systems
     PI_BACKUP_REMOTE="gdrive"           # Default rclone remote name
